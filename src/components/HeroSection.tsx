@@ -16,7 +16,7 @@ const HeroSection = () => (
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
         <a
-          href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
+          href="https://wa.me/51971193243?text=Hola,%20quisiera%20cotizar%20un%20proyecto%20de%20fabricación%20metálica.%20¿Podrían%20asesorarme?"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-accent text-accent-foreground px-8 py-3 rounded font-heading font-bold hover:brightness-110 transition text-lg"
