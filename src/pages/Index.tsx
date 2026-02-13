@@ -1,14 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
+import ServicesSection from "@/components/ServicesSection";
+import TechSpecsSection from "@/components/TechSpecsSection";
+import GallerySection from "@/components/GallerySection";
+import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
-const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
-};
+const Index = () => (
+  <>
+    <Header />
+    <main>
+      <HeroSection />
+      <AboutSection />
+      <ServicesSection />
+      <TechSpecsSection />
+      <GallerySection />
+      <ContactSection />
+    </main>
+    <Footer />
+    <WhatsAppFloat />
+  </>
+);
 
 export default Index;
