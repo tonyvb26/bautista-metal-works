@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react";
 
 const WhatsAppFloat = () => (
   <a
-    href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
+    href="https://wa.me/51971193243?text=Hola,%20quisiera%20cotizar%20un%20proyecto%20de%20fabricación%20metálica.%20¿Podrían%20asesorarme?"
     target="_blank"
     rel="noopener noreferrer"
     className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-accent text-accent-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
