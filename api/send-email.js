@@ -20,6 +20,7 @@ export default async function handler(req, res) {
       from: `"Web Comercial Bautista" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `SOLICITUD DE COTIZACIÓN - ${nombre || empresa}`,
+      replyTo: email,
       html: `
         <h2>Nueva solicitud de cotización</h2>
         <p><strong>Nombre / Empresa:</strong> ${nombre || empresa}</p>
