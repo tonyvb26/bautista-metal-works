@@ -1,11 +1,35 @@
 import nodemailer from "nodemailer";
 
+const rateLimit = new Map();
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Método no permitido" });
   }
 
-  // 🔥 AHORA COINCIDE CON EL FRONTEND
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
+  const now = Date.now();
+  const windowTime = 60 * 60 * 1000; // 1 hora
+  const maxRequests = 3;
+
+  if (!rateLimit.has(ip)) {
+    rateLimit.set(ip, []);
+  }
+
+  const requests = rateLimit.get(ip).filter(
+    (timestamp) => now - timestamp < windowTime
+  );
+
+  if (requests.length >= maxRequests) {
+    return res.status(429).json({
+      message: "Has alcanzado el límite de envíos. Intenta más tarde.",
+    });
+  }
+
+  requests.push(now);
+  rateLimit.set(ip, requests);
+
   const { name, email, phone, message } = req.body;
 
   const transporter = nodemailer.createTransport({
@@ -39,4 +63,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ message: "Error enviando correo" });
   }
 }
-
