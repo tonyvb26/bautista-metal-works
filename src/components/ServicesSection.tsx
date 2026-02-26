@@ -11,7 +11,7 @@ const services = [
     title: "Trabajo Operativo Técnico",
     items: [
       "Manufactura en acero inoxidable",
-      "Máquina lavadora industrial (450 kg)",
+      "Lavadoras Industriales",
       "Enrutado de tubería conduit",
       "Soldadura proceso GTAW",
     ],
