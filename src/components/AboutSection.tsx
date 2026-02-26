@@ -1,7 +1,7 @@
 import { Shield, Wrench, Award } from "lucide-react";
 
 const features = [
-  { icon: Shield, title: "Calidad Garantizada", desc: "Materiales de primera y procesos certificados." },
+  { icon: Shield, title: "Calidad Garantizada", desc: "Materiales de buena calidad." },
   { icon: Wrench, title: "Fabricación a Medida", desc: "Soluciones personalizadas para cada proyecto." },
   { icon: Award, title: "Experiencia Industrial", desc: "Años de trayectoria en el rubro metalmecánico." },
 ];
