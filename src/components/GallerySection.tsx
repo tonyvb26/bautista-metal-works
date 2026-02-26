@@ -2,12 +2,12 @@ import { useState } from "react";
 import { X } from "lucide-react";
 
 const placeholders = [
-  { src: "/gallery/public-gallery-img1.jpeg", alt: "Trabajo 1", cat: "Procesos" },
-  { src: "/gallery/public-gallery-img2.jpeg", alt: "Trabajo 2", cat: "Trabajos" },
-  { src: "/gallery/public-gallery-img3.jpeg", alt: "Trabajo 3", cat: "Maquinaria" },
-  { src: "/gallery/public-gallery-img4.png",  alt: "Trabajo 4", cat: "Procesos" },
-  { src: "/gallery/public-gallery-img5.jpeg", alt: "Trabajo 5", cat: "Trabajos" },
-  { src: "/gallery/public-gallery-img6.jpeg", alt: "Trabajo 6", cat: "Maquinaria" },
+  { src: "/gallery/public-gallery-img1.jpeg", alt: "Trabajo 1", cat: "Tubería contra incendios" },
+  { src: "/gallery/public-gallery-img2.jpeg", alt: "Trabajo 2", cat: "Cocina Rocket" },
+  { src: "/gallery/public-gallery-img3.jpeg", alt: "Trabajo 3", cat: "Portón en metal modelo acanalado" },
+  { src: "/gallery/public-gallery-img4.png",  alt: "Trabajo 4", cat: "Techo en metal" },
+  { src: "/gallery/public-gallery-img5.jpeg", alt: "Trabajo 5", cat: "Instalación de sistema de bandejas portacables" },
+  { src: "/gallery/public-gallery-img6.jpeg", alt: "Trabajo 6", cat: "Maquina Lavadora industrial" },
 ];
 
 const GallerySection = () => {
