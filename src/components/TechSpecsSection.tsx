@@ -2,10 +2,10 @@ import { CheckCircle } from "lucide-react";
 
 const specs = [
   { label: "Materiales", value: "Acero al carbono, acero inoxidable, aluminio, hierro galvanizado" },
-  { label: "Tipo de Acero", value: "ASTM A36, AISI 304, AISI 316" },
+  { label: "Tipo de Acero", value: "ASTM A36, AISI 308, AISI 316" },
   { label: "Proceso de Soldadura", value: "GTAW (TIG), SMAW, MIG/MAG" },
-  { label: "Capacidad de Carga", value: "Hasta 450 kg en máquinas industriales" },
-  { label: "Acabados", value: "Pintura electrostática, galvanizado, pulido espejo, satinado" },
+  { label: "Fabricación de Maquinaria", value: "Lavadoras industriales, bases para motores" },
+  { label: "Acabados", value: "Pintura epóxica y buen acabado" },
   { label: "Personalización", value: "Diseño 100% a medida según requerimiento del cliente" },
 ];
 
