@@ -45,8 +45,17 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="border-t border-primary-foreground/10 pt-6 text-center text-primary-foreground/50 text-xs">
-        © {new Date().getFullYear()} COMERCIAL BAUTISTA. Todos los derechos reservados.
+      <div className="border-t border-primary-foreground/10 pt-6 flex flex-col sm:flex-row items-center justify-center gap-2 text-center text-primary-foreground/50 text-xs">
+        <span>© {new Date().getFullYear()} COMERCIAL BAUTISTA. Todos los derechos reservados.</span>
+        <span className="hidden sm:inline" aria-hidden>
+          ·
+        </span>
+        <a
+          href="/politica-de-privacidad.html"
+          className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors"
+        >
+          Políticas de Privacidad
+        </a>
       </div>
     </div>
   </footer>
