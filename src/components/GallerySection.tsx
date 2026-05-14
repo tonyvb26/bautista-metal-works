@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
-  type RefObject,
 } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
@@ -54,77 +53,13 @@ const NUEVAS_ITEMS = [
 const GALLERY_ITEMS = [...LEGACY_ITEMS, ...NUEVAS_ITEMS];
 
 const LOOP_COPIES = 3;
-const DRAG_THRESHOLD_PX = 6;
+const DRAG_THRESHOLD_PX = 8;
 const AUTO_SCROLL_PX_PER_FRAME = 0.65;
 const AUTO_RESUME_MS = 2800;
-
-function useDragScroll(containerRef: RefObject<HTMLDivElement>) {
-  const state = useRef({ active: false, pointerId: 0, startX: 0, scrollStart: 0, draggedSinceDown: false });
-  const globalCleanupRef = useRef<(() => void) | null>(null);
-
-  const clearGlobalListeners = useCallback(() => {
-    globalCleanupRef.current?.();
-    globalCleanupRef.current = null;
-  }, []);
-
-  const onPointerDown = useCallback(
-    (e: ReactPointerEvent<HTMLDivElement>) => {
-      const el = containerRef.current;
-      if (!el) return;
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      clearGlobalListeners();
-      state.current.active = true;
-      state.current.pointerId = e.pointerId;
-      state.current.startX = e.clientX;
-      state.current.scrollStart = el.scrollLeft;
-      state.current.draggedSinceDown = false;
-
-      const finish = (ev: PointerEvent) => {
-        if (ev.pointerId !== state.current.pointerId) return;
-        state.current.active = false;
-        clearGlobalListeners();
-      };
-      globalCleanupRef.current = () => {
-        window.removeEventListener("pointerup", finish);
-        window.removeEventListener("pointercancel", finish);
-      };
-      window.addEventListener("pointerup", finish);
-      window.addEventListener("pointercancel", finish);
-    },
-    [containerRef, clearGlobalListeners],
-  );
-
-  const endPointer = useCallback(
-    (e: ReactPointerEvent<HTMLDivElement>) => {
-      if (!state.current.active || e.pointerId !== state.current.pointerId) return;
-      state.current.active = false;
-      clearGlobalListeners();
-    },
-    [clearGlobalListeners],
-  );
-
-  const onPointerMove = useCallback(
-    (e: ReactPointerEvent<HTMLDivElement>) => {
-      const el = containerRef.current;
-      if (!el || !state.current.active || e.pointerId !== state.current.pointerId) return;
-      const dx = e.clientX - state.current.startX;
-      if (!state.current.draggedSinceDown && Math.abs(dx) >= DRAG_THRESHOLD_PX) {
-        state.current.draggedSinceDown = true;
-      }
-      if (state.current.draggedSinceDown) {
-        el.scrollLeft = state.current.scrollStart - dx;
-      }
-    },
-    [containerRef],
-  );
-
-  return {
-    onPointerDown,
-    onPointerMove,
-    onPointerUp: endPointer,
-    onPointerCancel: endPointer,
-  };
-}
+/** px/ms mínimo para arrancar inercia al soltar */
+const MOMENTUM_MIN_SPEED = 0.35;
+/** amortiguación exponencial (mayor = frena antes) */
+const MOMENTUM_DECAY_PER_MS = 0.0022;
 
 const GallerySection = () => {
   const stripRef = useRef<HTMLDivElement>(null);
@@ -135,7 +70,33 @@ const GallerySection = () => {
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lightboxRef = useRef<number | null>(null);
   const prevLightboxRef = useRef<number | null>(null);
-  const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useDragScroll(stripRef);
+
+  const dragRef = useRef({
+    active: false,
+    pointerId: 0,
+    startX: 0,
+    scrollStart: 0,
+    dragged: false,
+  });
+  const moveSampleRef = useRef({ t: 0, scroll: 0, ready: false });
+  const scrollVelRef = useRef(0);
+  const suppressClickRef = useRef(false);
+  const momentumRafRef = useRef(0);
+  const momentumActiveRef = useRef(false);
+  const globalUpCleanupRef = useRef<(() => void) | null>(null);
+
+  const clearGlobalUp = useCallback(() => {
+    globalUpCleanupRef.current?.();
+    globalUpCleanupRef.current = null;
+  }, []);
+
+  const cancelMomentum = useCallback(() => {
+    if (momentumRafRef.current) {
+      cancelAnimationFrame(momentumRafRef.current);
+      momentumRafRef.current = 0;
+    }
+    momentumActiveRef.current = false;
+  }, []);
 
   const loopItems = useMemo(() => {
     const out: { item: (typeof GALLERY_ITEMS)[number]; loopIndex: number; realIndex: number }[] = [];
@@ -167,8 +128,10 @@ const GallerySection = () => {
   useEffect(() => {
     return () => {
       if (resumeTimerRef.current !== null) clearTimeout(resumeTimerRef.current);
+      clearGlobalUp();
+      cancelMomentum();
     };
-  }, []);
+  }, [clearGlobalUp, cancelMomentum]);
 
   useEffect(() => {
     if (lightbox !== null) {
@@ -187,7 +150,7 @@ const GallerySection = () => {
     let id = 0;
     const tick = () => {
       const el = stripRef.current;
-      if (el && !autoPausedRef.current && lightboxRef.current === null) {
+      if (el && !autoPausedRef.current && lightboxRef.current === null && !momentumActiveRef.current) {
         el.scrollLeft += AUTO_SCROLL_PX_PER_FRAME;
       }
       id = requestAnimationFrame(tick);
@@ -241,43 +204,163 @@ const GallerySection = () => {
     normalizeScroll();
   }, [normalizeScroll]);
 
-  useEffect(() => {
-    const el = stripRef.current;
-    if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      bumpUserInteraction();
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      if (delta === 0) return;
-      e.preventDefault();
-      el.scrollLeft += delta;
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [bumpUserInteraction]);
+  const startMomentum = useCallback(
+    (velocityPxPerMs: number) => {
+      const el = stripRef.current;
+      if (!el || Math.abs(velocityPxPerMs) < MOMENTUM_MIN_SPEED) {
+        bumpUserInteraction();
+        return;
+      }
 
-  const handlePointerDownStrip = useCallback(
-    (e: ReactPointerEvent<HTMLDivElement>) => {
-      bumpUserInteraction();
-      onPointerDown(e);
+      cancelMomentum();
+      autoPausedRef.current = true;
+      momentumActiveRef.current = true;
+
+      let v = velocityPxPerMs * 1000;
+      let lastTs = 0;
+
+      const step = (ts: number) => {
+        const strip = stripRef.current;
+        if (!strip) {
+          momentumRafRef.current = 0;
+          momentumActiveRef.current = false;
+          bumpUserInteraction();
+          return;
+        }
+
+        if (lastTs === 0) {
+          lastTs = ts;
+          momentumRafRef.current = requestAnimationFrame(step);
+          return;
+        }
+
+        const dt = Math.min(ts - lastTs, 32);
+        lastTs = ts;
+
+        strip.scrollLeft += v * (dt / 1000);
+        normalizeScroll();
+
+        v *= Math.exp(-MOMENTUM_DECAY_PER_MS * dt);
+
+        if (Math.abs(v) < 8) {
+          momentumRafRef.current = 0;
+          momentumActiveRef.current = false;
+          bumpUserInteraction();
+          return;
+        }
+
+        momentumRafRef.current = requestAnimationFrame(step);
+      };
+
+      momentumRafRef.current = requestAnimationFrame(step);
     },
-    [bumpUserInteraction, onPointerDown],
-  );
-  const handlePointerUpStrip = useCallback(
-    (e: ReactPointerEvent<HTMLDivElement>) => {
-      onPointerUp(e);
-      bumpUserInteraction();
-    },
-    [bumpUserInteraction, onPointerUp],
-  );
-  const handlePointerCancelStrip = useCallback(
-    (e: ReactPointerEvent<HTMLDivElement>) => {
-      onPointerCancel(e);
-      bumpUserInteraction();
-    },
-    [bumpUserInteraction, onPointerCancel],
+    [bumpUserInteraction, cancelMomentum, normalizeScroll],
   );
 
-  const openThumb = useCallback((realIndex: number) => {
+  const endDragPointer = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement> | PointerEvent) => {
+      const d = dragRef.current;
+      if (!d.active || e.pointerId !== d.pointerId) return;
+
+      d.active = false;
+      clearGlobalUp();
+
+      if (d.dragged) {
+        suppressClickRef.current = true;
+        startMomentum(scrollVelRef.current);
+      } else {
+        scrollVelRef.current = 0;
+      }
+
+      moveSampleRef.current = { t: 0, scroll: 0, ready: false };
+    },
+    [clearGlobalUp, startMomentum],
+  );
+
+  const onPointerDownStrip = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement>) => {
+      const el = stripRef.current;
+      if (!el) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+
+      bumpUserInteraction();
+      cancelMomentum();
+      suppressClickRef.current = false;
+
+      dragRef.current = {
+        active: true,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        scrollStart: el.scrollLeft,
+        dragged: false,
+      };
+      scrollVelRef.current = 0;
+      moveSampleRef.current = { t: performance.now(), scroll: el.scrollLeft, ready: false };
+
+      clearGlobalUp();
+      const finish = (ev: PointerEvent) => {
+        if (ev.pointerId !== dragRef.current.pointerId) return;
+        endDragPointer(ev);
+      };
+      globalUpCleanupRef.current = () => {
+        window.removeEventListener("pointerup", finish);
+        window.removeEventListener("pointercancel", finish);
+      };
+      window.addEventListener("pointerup", finish);
+      window.addEventListener("pointercancel", finish);
+    },
+    [bumpUserInteraction, cancelMomentum, clearGlobalUp, endDragPointer],
+  );
+
+  const onPointerMoveStrip = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement>) => {
+      const el = stripRef.current;
+      const d = dragRef.current;
+      if (!el || !d.active || e.pointerId !== d.pointerId) return;
+
+      const dx = e.clientX - d.startX;
+      if (!d.dragged && Math.abs(dx) >= DRAG_THRESHOLD_PX) {
+        d.dragged = true;
+      }
+      if (d.dragged) {
+        el.scrollLeft = d.scrollStart - dx;
+
+        const now = performance.now();
+        const prev = moveSampleRef.current;
+        if (prev.ready && now > prev.t) {
+          const ds = el.scrollLeft - prev.scroll;
+          const dt = now - prev.t;
+          if (dt > 0) {
+            scrollVelRef.current = ds / dt;
+          }
+        }
+        moveSampleRef.current = { t: now, scroll: el.scrollLeft, ready: true };
+      }
+    },
+    [],
+  );
+
+  const onPointerUpStrip = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement>) => {
+      endDragPointer(e);
+      bumpUserInteraction();
+    },
+    [endDragPointer, bumpUserInteraction],
+  );
+
+  const onPointerCancelStrip = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement>) => {
+      endDragPointer(e);
+      bumpUserInteraction();
+    },
+    [endDragPointer, bumpUserInteraction],
+  );
+
+  const tryOpenThumb = useCallback((realIndex: number) => {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
     setLightbox(realIndex);
   }, []);
 
@@ -301,12 +384,12 @@ const GallerySection = () => {
         <div
           ref={stripRef}
           role="region"
-          aria-label="Galería de proyectos, desplazamiento horizontal"
+          aria-label="Galería de proyectos, desplazamiento horizontal arrastrando"
           onScroll={onScrollStrip}
-          onPointerDown={handlePointerDownStrip}
-          onPointerMove={onPointerMove}
-          onPointerUp={handlePointerUpStrip}
-          onPointerCancel={handlePointerCancelStrip}
+          onPointerDown={onPointerDownStrip}
+          onPointerMove={onPointerMoveStrip}
+          onPointerUp={onPointerUpStrip}
+          onPointerCancel={onPointerCancelStrip}
           className="
             flex w-full gap-8 sm:gap-10 overflow-x-auto pb-2
             [-ms-overflow-style:none] [scrollbar-width:none]
@@ -318,7 +401,7 @@ const GallerySection = () => {
             <button
               key={`loop-${loopIndex}`}
               type="button"
-              onClick={() => openThumb(realIndex)}
+              onClick={() => tryOpenThumb(realIndex)}
               className="
                 relative flex-shrink-0 w-[min(94vw,640px)] sm:w-[600px] md:w-[640px]
                 overflow-hidden rounded-lg aspect-[4/3] group text-left outline-none cursor-pointer
@@ -379,10 +462,7 @@ const GallerySection = () => {
             <ChevronRight className="h-7 w-7" />
           </button>
 
-          <div
-            className="w-full max-w-4xl flex flex-col items-center gap-5 px-12 sm:px-16 pt-8"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="w-full max-w-4xl flex flex-col items-center gap-5 px-12 sm:px-16 pt-8" onClick={(e) => e.stopPropagation()}>
             <img
               src={GALLERY_ITEMS[lightbox].src}
               alt={GALLERY_ITEMS[lightbox].alt}
