@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MessageCircle } from "lucide-react";
 import logo from "@/assets/logo-comercial-bautista.jpeg";
 
+const spaRoutes = new Set(["/politica-de-privacidad", "/terminos-servicio"]);
+
 const quickLinks: { href: string; label: string }[] = [
   { href: "/#inicio", label: "Inicio" },
   { href: "/#nosotros", label: "Nosotros" },
@@ -10,6 +12,7 @@ const quickLinks: { href: string; label: string }[] = [
   { href: "/#galeria", label: "Galería" },
   { href: "/#contacto", label: "Contacto" },
   { href: "/politica-de-privacidad", label: "Política de privacidad" },
+  { href: "/terminos-servicio", label: "Términos del servicio" },
 ];
 
 const Footer = () => (
@@ -32,7 +35,7 @@ const Footer = () => (
           <h4 className="font-heading font-semibold text-accent mb-4">Enlaces Rápidos</h4>
           <nav className="space-y-2">
             {quickLinks.map((l) =>
-              l.href === "/politica-de-privacidad" ? (
+              spaRoutes.has(l.href) ? (
                 <Link key={l.href} to={l.href} className="block text-primary-foreground/70 hover:text-accent text-sm transition-colors">
                   {l.label}
                 </Link>
@@ -62,16 +65,19 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="border-t border-primary-foreground/10 pt-6 flex flex-col sm:flex-row items-center justify-center gap-2 text-center text-primary-foreground/50 text-xs">
+      <div className="border-t border-primary-foreground/10 pt-6 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-primary-foreground/50 text-xs">
         <span>© {new Date().getFullYear()} COMERCIAL BAUTISTA. Todos los derechos reservados.</span>
         <span className="hidden sm:inline" aria-hidden>
           ·
         </span>
-        <Link
-          to="/politica-de-privacidad"
-          className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors"
-        >
+        <Link to="/politica-de-privacidad" className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors">
           Políticas de Privacidad
+        </Link>
+        <span className="hidden sm:inline" aria-hidden>
+          ·
+        </span>
+        <Link to="/terminos-servicio" className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors">
+          Términos del servicio
         </Link>
       </div>
     </div>

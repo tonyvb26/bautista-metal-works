@@ -1,10 +1,12 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 const PoliticaPrivacidad = () => {
+  const location = useLocation();
+
   useEffect(() => {
     const prev = document.title;
     document.title = "Política de privacidad | COMERCIAL BAUTISTA";
@@ -12,6 +14,14 @@ const PoliticaPrivacidad = () => {
       document.title = prev;
     };
   }, []);
+
+  useEffect(() => {
+    if (location.hash !== "#eliminacion-datos") return;
+    const id = window.setTimeout(() => {
+      document.getElementById("eliminacion-datos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, [location.hash, location.pathname]);
 
   return (
     <>
@@ -28,6 +38,34 @@ const PoliticaPrivacidad = () => {
               </a>
               , informa cómo tratamos los datos personales cuando nos contactas por WhatsApp u otros medios relacionados con nuestros servicios de
               carpintería metálica y fabricación industrial.
+            </p>
+
+            <div
+              id="eliminacion-datos"
+              className="rounded-lg border border-border bg-muted/60 p-4 md:p-5 mt-8 scroll-mt-24"
+            >
+              <h2 className="font-heading text-xl font-semibold text-primary mb-3">Eliminación de datos personales</h2>
+              <p>
+                Si deseas solicitar la eliminación de tus datos personales asociados a consultas o conversaciones con nosotros (incluido el canal de
+                WhatsApp), escríbenos al correo{" "}
+                <a href="mailto:metaltec@comercialbautista.net" className="text-accent font-medium underline underline-offset-2 hover:brightness-110">
+                  metaltec@comercialbautista.net
+                </a>{" "}
+                indicando tu número de teléfono o canal de contacto y el tipo de solicitud. Responderemos en un plazo razonable y podremos pedirte información
+                mínima para verificar tu identidad.
+              </p>
+              <p className="mt-3">
+                Los plazos y alcances pueden depender de obligaciones legales en Perú y de la conservación necesaria para atender reclamos o requerimientos
+                válidos.
+              </p>
+            </div>
+
+            <p className="text-sm text-foreground/70 mt-4">
+              También puedes leer los{" "}
+              <Link to="/terminos-servicio" className="text-accent font-medium underline underline-offset-2 hover:brightness-110">
+                términos del servicio
+              </Link>
+              .
             </p>
 
             <h2 className="font-heading text-xl font-semibold text-primary mt-10 mb-3">1. Responsable del tratamiento</h2>
