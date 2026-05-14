@@ -31,7 +31,7 @@ const HeroSection = () => (
         style={{ animationDelay: "0.4s" }}
       >
         <a
-          href="https://wa.me/51971193243?text=Hola,%20quisiera%20cotizar%20un%20proyecto%20de%20fabricación%20metálica.%20¿Podrían%20asesorarme?"
+          href="https://wa.me/51932285043?text=Hola,%20quisiera%20cotizar%20un%20proyecto%20de%20fabricación%20metálica.%20¿Podrían%20asesorarme?"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-accent text-accent-foreground px-8 py-3 rounded font-heading font-bold hover:brightness-110 transition text-lg"

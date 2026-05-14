@@ -58,13 +58,13 @@ const Footer = () => (
         <div>
           <h4 className="font-heading font-semibold text-accent mb-4">Contacto</h4>
           <div className="space-y-3 text-primary-foreground/70 text-sm">
-            <a href="tel:+51971193243" className="flex items-center gap-2 hover:text-accent transition-colors">
-              <Phone className="h-4 w-4" /> 971 193 243
+            <a href="tel:+51932285043" className="flex items-center gap-2 hover:text-accent transition-colors">
+              <Phone className="h-4 w-4" /> 932 285 043
             </a>
             <a href="mailto:metaltec@comercialbautista.net" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Mail className="h-4 w-4" /> metaltec@comercialbautista.net
             </a>
-            <a href="https://wa.me/51971193243" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="https://wa.me/51932285043" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-accent transition-colors">
               <MessageCircle className="h-4 w-4" /> WhatsApp
             </a>
           </div>

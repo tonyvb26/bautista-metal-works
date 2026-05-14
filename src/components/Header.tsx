@@ -19,8 +19,8 @@ const Header = () => {
       {/* Top bar */}
       <div className="hidden md:block border-b border-primary-foreground/20">
         <div className="container mx-auto flex items-center justify-end gap-6 py-1.5 text-xs text-primary-foreground/80">
-          <a href="tel:+51971193243" className="flex items-center gap-1 hover:text-accent transition-colors">
-            <Phone className="h-3 w-3" /> 971 193 243
+          <a href="tel:+51932285043" className="flex items-center gap-1 hover:text-accent transition-colors">
+            <Phone className="h-3 w-3" /> 932 285 043
           </a>
           <a href="mailto:metaltec@comercialbautista.net" className="flex items-center gap-1 hover:text-accent transition-colors">
             <Mail className="h-3 w-3" /> metaltec@comercialbautista.net
@@ -46,7 +46,7 @@ const Header = () => {
           ))}
           <div className="flex items-center gap-2">
             <a
-              href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
+              href="https://wa.me/51932285043?text=Hola%2C%20quiero%20más%20información"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded font-heading font-semibold text-sm hover:brightness-110 transition"
@@ -84,12 +84,12 @@ const Header = () => {
             </a>
           ))}
           <div className="flex flex-col gap-2 mt-3 text-sm text-primary-foreground/80">
-            <a href="tel:+51971193243" className="flex items-center gap-2"><Phone className="h-4 w-4" /> 971 193 243</a>
+            <a href="tel:+51932285043" className="flex items-center gap-2"><Phone className="h-4 w-4" /> 932 285 043</a>
             <a href="mailto:metaltec@comercialbautista.net" className="flex items-center gap-2"><Mail className="h-4 w-4" /> metaltec@comercialbautista.net</a>
           </div>
           <div className="flex flex-col gap-2 mt-3">
             <a
-              href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
+              href="https://wa.me/51932285043?text=Hola%2C%20quiero%20más%20información"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded font-heading font-semibold text-sm"

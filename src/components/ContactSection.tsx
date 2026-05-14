@@ -125,7 +125,7 @@ const ContactSection = () => {
               <div className="space-y-5">
 
                 <a
-                  href="tel:+51971193243"
+                  href="tel:+51932285043"
                   className="flex items-center gap-4 text-foreground hover:text-accent transition-colors"
                 >
                   <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center shrink-0">
@@ -133,7 +133,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Teléfono</p>
-                    <p className="font-semibold">971 193 243</p>
+                    <p className="font-semibold">932 285 043</p>
                   </div>
                 </a>
 
@@ -164,7 +164,7 @@ const ContactSection = () => {
             </div>
 
             <a
-              href="https://wa.me/51971193243?text=Hola%2C%20quiero%20solicitar%20una%20cotización"
+              href="https://wa.me/51932285043?text=Hola%2C%20quiero%20solicitar%20una%20cotización"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 bg-accent text-accent-foreground py-4 rounded-lg font-heading font-bold text-lg hover:brightness-110 transition"
