@@ -1,5 +1,16 @@
+import { Link } from "react-router-dom";
 import { Phone, Mail, MessageCircle } from "lucide-react";
 import logo from "@/assets/logo-comercial-bautista.jpeg";
+
+const quickLinks: { href: string; label: string }[] = [
+  { href: "/#inicio", label: "Inicio" },
+  { href: "/#nosotros", label: "Nosotros" },
+  { href: "/#servicios", label: "Servicios" },
+  { href: "/#especificaciones", label: "Especificaciones" },
+  { href: "/#galeria", label: "Galería" },
+  { href: "/#contacto", label: "Contacto" },
+  { href: "/politica-de-privacidad", label: "Política de privacidad" },
+];
 
 const Footer = () => (
   <footer className="bg-primary py-12">
@@ -20,11 +31,17 @@ const Footer = () => (
         <div>
           <h4 className="font-heading font-semibold text-accent mb-4">Enlaces Rápidos</h4>
           <nav className="space-y-2">
-            {["Inicio", "Nosotros", "Servicios", "Especificaciones", "Galería", "Contacto"].map((l) => (
-              <a key={l} href={`#${l.toLowerCase()}`} className="block text-primary-foreground/70 hover:text-accent text-sm transition-colors">
-                {l}
-              </a>
-            ))}
+            {quickLinks.map((l) =>
+              l.href === "/politica-de-privacidad" ? (
+                <Link key={l.href} to={l.href} className="block text-primary-foreground/70 hover:text-accent text-sm transition-colors">
+                  {l.label}
+                </Link>
+              ) : (
+                <a key={l.href} href={l.href} className="block text-primary-foreground/70 hover:text-accent text-sm transition-colors">
+                  {l.label}
+                </a>
+              ),
+            )}
           </nav>
         </div>
 
@@ -50,12 +67,12 @@ const Footer = () => (
         <span className="hidden sm:inline" aria-hidden>
           ·
         </span>
-        <a
-          href="/politica-de-privacidad.html"
+        <Link
+          to="/politica-de-privacidad"
           className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors"
         >
           Políticas de Privacidad
-        </a>
+        </Link>
       </div>
     </div>
   </footer>

@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Phone, Mail, Menu, X, MessageCircle } from "lucide-react";
+import { Phone, Mail, Menu, X, MessageCircle, Facebook } from "lucide-react";
 import logo from "@/assets/logo-comercial-bautista.jpeg";
 
 const navLinks = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#nosotros", label: "Nosotros" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#especificaciones", label: "Especificaciones" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#contacto", label: "Contacto" },
+  { href: "/#inicio", label: "Inicio" },
+  { href: "/#nosotros", label: "Nosotros" },
+  { href: "/#servicios", label: "Servicios" },
+  { href: "/#especificaciones", label: "Especificaciones" },
+  { href: "/#galeria", label: "Galería" },
+  { href: "/#contacto", label: "Contacto" },
 ];
 
 const Header = () => {
@@ -30,7 +30,7 @@ const Header = () => {
 
       {/* Main nav */}
       <div className="container mx-auto flex items-center justify-between py-3 px-4">
-        <a href="#inicio" className="flex items-center gap-3">
+        <a href="/#inicio" className="flex items-center gap-3">
           <img src={logo} alt="COMERCIAL BAUTISTA logo" className="h-12 w-auto rounded" />
           <span className="hidden sm:block font-heading font-bold text-primary-foreground text-lg leading-tight">
             COMERCIAL<br />BAUTISTA
@@ -44,14 +44,24 @@ const Header = () => {
               {l.label}
             </a>
           ))}
-          <a
-            href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded font-heading font-semibold text-sm hover:brightness-110 transition"
-          >
-            <MessageCircle className="h-4 w-4" /> WhatsApp
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded font-heading font-semibold text-sm hover:brightness-110 transition"
+            >
+              <MessageCircle className="h-4 w-4" /> WhatsApp
+            </a>
+            <a
+              href="https://www.facebook.com/people/Metaltec-Comercial-Bautista/61588330106602/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-[#1877F2] text-white px-4 py-2 rounded font-heading font-semibold text-sm hover:brightness-110 transition"
+            >
+              <Facebook className="h-4 w-4 shrink-0" aria-hidden /> Facebook
+            </a>
+          </div>
         </nav>
 
         {/* Mobile toggle */}
@@ -77,14 +87,24 @@ const Header = () => {
             <a href="tel:+51971193243" className="flex items-center gap-2"><Phone className="h-4 w-4" /> 971 193 243</a>
             <a href="mailto:metaltec@comercialbautista.net" className="flex items-center gap-2"><Mail className="h-4 w-4" /> metaltec@comercialbautista.net</a>
           </div>
-          <a
-            href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 flex items-center justify-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded font-heading font-semibold text-sm"
-          >
-            <MessageCircle className="h-4 w-4" /> WhatsApp
-          </a>
+          <div className="flex flex-col gap-2 mt-3">
+            <a
+              href="https://wa.me/51971193243?text=Hola%2C%20quiero%20más%20información"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded font-heading font-semibold text-sm"
+            >
+              <MessageCircle className="h-4 w-4" /> WhatsApp
+            </a>
+            <a
+              href="https://www.facebook.com/people/Metaltec-Comercial-Bautista/61588330106602/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 bg-[#1877F2] text-white px-4 py-2 rounded font-heading font-semibold text-sm"
+            >
+              <Facebook className="h-4 w-4 shrink-0" aria-hidden /> Facebook
+            </a>
+          </div>
         </nav>
       )}
     </header>
