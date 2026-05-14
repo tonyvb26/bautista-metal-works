@@ -6,10 +6,10 @@ const spaRoutes = new Set(["/politica-de-privacidad", "/terminos-servicio"]);
 
 const quickLinks: { href: string; label: string }[] = [
   { href: "/#inicio", label: "Inicio" },
-  { href: "/#nosotros", label: "Nosotros" },
+  { href: "/#galeria", label: "Galería" },
   { href: "/#servicios", label: "Servicios" },
   { href: "/#especificaciones", label: "Especificaciones" },
-  { href: "/#galeria", label: "Galería" },
+  { href: "/#nosotros", label: "Nosotros" },
   { href: "/#contacto", label: "Contacto" },
   { href: "/politica-de-privacidad", label: "Política de privacidad" },
   { href: "/terminos-servicio", label: "Términos del servicio" },

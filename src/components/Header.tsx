@@ -4,10 +4,10 @@ import logo from "@/assets/logo-comercial-bautista.jpeg";
 
 const navLinks = [
   { href: "/#inicio", label: "Inicio" },
-  { href: "/#nosotros", label: "Nosotros" },
+  { href: "/#galeria", label: "Galería" },
   { href: "/#servicios", label: "Servicios" },
   { href: "/#especificaciones", label: "Especificaciones" },
-  { href: "/#galeria", label: "Galería" },
+  { href: "/#nosotros", label: "Nosotros" },
   { href: "/#contacto", label: "Contacto" },
 ];
 
