@@ -40,7 +40,12 @@ const TerminosServicio = () => {
             <p>
               Las conversaciones por WhatsApp u otros medios tienen fines comerciales y de atención. No garantizamos disponibilidad ininterrumpida de canales
               automatizados; puedes solicitar atención humana según lo indicado en nuestra{" "}
-              <Link to="/politica-de-privacidad" className="text-accent font-medium underline underline-offset-2 hover:brightness-110">
+              <Link
+                to="/politica-de-privacidad"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent font-medium underline underline-offset-2 hover:brightness-110"
+              >
                 política de privacidad
               </Link>
               .
@@ -61,7 +66,12 @@ const TerminosServicio = () => {
               Volver al inicio
             </Link>
             <span className="text-foreground/50">·</span>
-            <Link to="/politica-de-privacidad" className="font-heading font-semibold text-accent underline underline-offset-2 hover:brightness-110">
+            <Link
+              to="/politica-de-privacidad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-heading font-semibold text-accent underline underline-offset-2 hover:brightness-110"
+            >
               Política de privacidad
             </Link>
           </p>

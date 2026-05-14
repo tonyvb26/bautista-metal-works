@@ -62,7 +62,12 @@ const PoliticaPrivacidad = () => {
 
             <p className="text-sm text-foreground/70 mt-4">
               También puedes leer los{" "}
-              <Link to="/terminos-servicio" className="text-accent font-medium underline underline-offset-2 hover:brightness-110">
+              <Link
+                to="/terminos-servicio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent font-medium underline underline-offset-2 hover:brightness-110"
+              >
                 términos del servicio
               </Link>
               .

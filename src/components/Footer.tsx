@@ -36,7 +36,13 @@ const Footer = () => (
           <nav className="space-y-2">
             {quickLinks.map((l) =>
               spaRoutes.has(l.href) ? (
-                <Link key={l.href} to={l.href} className="block text-primary-foreground/70 hover:text-accent text-sm transition-colors">
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-primary-foreground/70 hover:text-accent text-sm transition-colors"
+                >
                   {l.label}
                 </Link>
               ) : (
@@ -70,13 +76,23 @@ const Footer = () => (
         <span className="hidden sm:inline" aria-hidden>
           ·
         </span>
-        <Link to="/politica-de-privacidad" className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors">
+        <Link
+          to="/politica-de-privacidad"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors"
+        >
           Políticas de Privacidad
         </Link>
         <span className="hidden sm:inline" aria-hidden>
           ·
         </span>
-        <Link to="/terminos-servicio" className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors">
+        <Link
+          to="/terminos-servicio"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary-foreground/60 underline underline-offset-2 hover:text-accent transition-colors"
+        >
           Términos del servicio
         </Link>
       </div>
